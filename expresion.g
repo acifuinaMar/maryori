@@ -8,16 +8,28 @@ expr
     | expr (MUL | DIV) expr
     | expr (SUM | RES) expr
     | NUM
+    | expr (IGUAL | NOIGUAL) expr 
+    | expr (MAYOR | MENOR) expr 
+    | expr (MENORI | MAYORI) expr
     ;
 
-// Operadores
+// Operadores aritmeticos
 SUM : '+' ;
 RES : '-' ;
 MUL : '*' ;
 DIV : '/' ;
 PAI : '(' ;
 PAD : ')' ;
-NUM : [0-9]+ ;
+NUM : [0-9]+;
+
+//Operadores relacionales
+IGUAL : '=';
+NOIGUAL: '!=';
+MENOR: '<';
+MAYOR: '>';
+MENORI: '<=';
+MAYORI: '=>';
+
 
 // Manejo de los espacios en blanco
 WS : [ \n\t\r]+ -> skip ;
