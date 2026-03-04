@@ -1,31 +1,58 @@
 grammar expresion;
 
-root : expr+ EOF ;
-
-// Escritura de una gramática
-expr
-    : PAI expr PAD
-    | expr (MUL | DIV) expr
-    | expr (SUM | RES) expr
-    | expr (IGUAL | NOIGUAL) expr
-    | expr (MAYOR | MENOR | MENORI | MAYORI) expr
-    | expr AND expr
-    | expr OR expr
-    | NOT expr
-    | NUM
-    | ID
+root
+    : expresion+ EOF
     ;
 
-// Operadores aritmeticos
+// Expresiones
+expresion
+    : orLogico
+    ;
+orLogico
+    : andLogico (OR andLogico)*
+    ;
+andLogico
+    : igualdad (AND igualdad)*
+    ;
+igualdad
+    : comparacion ((IGUAL | NOIGUAL) comparacion)*
+    ;
+comparacion
+    : suma ((MAYOR | MENOR | MAYORI | MENORI) suma)*
+    ;
+suma
+    : multiplicacion ((SUM | RES) multiplicacion)*
+    ;
+multiplicacion
+    : unario ((MUL | DIV) unario)*
+    ;
+unario
+    : NOT unario
+    | base
+    ;
+
+
+// cosas que ya no puedo simplificar mas
+base
+    : NUM
+    | ID
+    | PAI expresion PAD
+    ;
+
+// Operadores aritméticos
+
 SUM : '+' ;
 RES : '-' ;
 MUL : '*' ;
 DIV : '/' ;
 
+// Parentesis
+
 PAI : '(' ;
 PAD : ')' ;
 
 // Operadores relacionales
+
 IGUAL   : '==' ;
 NOIGUAL : '!=' ;
 MENOR   : '<' ;
@@ -33,12 +60,14 @@ MAYOR   : '>' ;
 MENORI  : '<=' ;
 MAYORI  : '>=' ;
 
-// Operadores logicos
+// Operadores lógicos
+
 AND : '&&' ;
 OR  : '||' ;
 NOT : '!' ;
 
-// Tokens
+// Tokens 
+
 NUM : [0-9]+ ;
 ID  : [a-zA-Z][a-zA-Z0-9]* ;
 
